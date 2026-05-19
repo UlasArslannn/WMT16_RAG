@@ -32,6 +32,7 @@ Last updated: 2026-05-17
 ## Bugs & Fixes
 - [venv-ensurepip-ubuntu](bugs_fixes/venv-ensurepip-ubuntu.md) — status: fixed — `python3 -m venv` ensurepip hatası Ubuntu/Debian'da, çözüm: `--without-pip` + `get-pip.py`
 - [colab-vm-kernel-class](bugs_fixes/colab-vm-kernel-class.md) — status: fixed — Colab VM'de venv kernel'ı `google.colab._kernel` import hatasıyla başlamıyor, çözüm: `/etc/ipython/ipython_config.py`'yi koşullu hale getir
+- [comet-cuda-oom](bugs_fixes/comet-cuda-oom.md) — status: fixed — COMET evaluation sırasında Qwen GPU'da yüklüyken OOM hatası; çözüm: Qwen'i boşalt veya `gpus=0` kullan
 
 ---
 

@@ -52,9 +52,27 @@ result = compute_comet(sources, hypotheses, references, comet_model)
 print(result['system_score'])
 ```
 
+## GPU Memory Management
+
+COMET modeli (XLM-R tabanlı, ~2 GiB) GPU'ya taşınır. Qwen gibi büyük bir model zaten yüklüyse OOM hatası oluşur.
+
+**Öneri:** COMET evaluation başlamadan önce Qwen modelini bellekten boşalt:
+
+```python
+import torch, gc
+del translation_model
+gc.collect()
+torch.cuda.empty_cache()
+```
+
+Alternatif olarak `gpus=0` ile CPU'da çalıştırılabilir (yavaş ama güvenli).
+
+Detaylar: [[bugs_fixes/comet-cuda-oom]]
+
 ## Sources
 - [[sources/2026-05-17-hw2-implementation]]
 
 ## Related
 - [[concepts/rag-architecture]]
 - [[concepts/prompting-strategies]]
+- [[bugs_fixes/comet-cuda-oom]]

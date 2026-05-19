@@ -24,3 +24,9 @@ Format: `## [YYYY-MM-DD] operation | slug`
 - Colab VM'de venv kernel'ı google.colab._kernel import hatasıyla başlamıyor
 - Çözüm: /etc/ipython/ipython_config.py'deki kernel_class atamasını try/except ile koşullu hale getir
 
+## [2026-05-19] bug | comet-cuda-oom
+- Pages touched: bugs_fixes/comet-cuda-oom.md, concepts/comet-metric.md, INDEX.md
+- COMET evaluation sırasında Qwen modeli GPU'da yüklü olduğu için OOM hatası
+- Çözüm A: Qwen'i del + gc.collect() + torch.cuda.empty_cache() ile boşalt
+- Çözüm B: compute_comet(..., gpus=0) ile CPU'da çalıştır
+
