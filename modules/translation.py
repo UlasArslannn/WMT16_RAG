@@ -76,9 +76,13 @@ def translate_paper_strategy(
     translations = []
     for sent in tqdm(sentences, desc="[Paper strategy] Translating"):
         prompt = paper_strategy_prompt(sent, direction=direction)
-        # Longer output allowed to accommodate the 3-stage response
-        output = generate(model, tokenizer, prompt, max_new_tokens=512)
-        final = extract_final_translation(output)
+        final = ""
+        for _attempt in range(3):
+            # Longer output allowed to accommodate the 3-stage response
+            output = generate(model, tokenizer, prompt, max_new_tokens=512)
+            final = extract_final_translation(output)
+            if final:
+                break
         translations.append(final)
 
     if save_path:
