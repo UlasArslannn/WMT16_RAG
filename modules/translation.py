@@ -78,8 +78,8 @@ def translate_paper_strategy(
         prompt = paper_strategy_prompt(sent, direction=direction)
         final = ""
         for _attempt in range(3):
-            # Longer output allowed to accommodate the 3-stage response
-            output = generate(model, tokenizer, prompt, max_new_tokens=512)
+            # Longer output: 3-stage MAPS response can reach 600+ tokens for complex sentences
+            output = generate(model, tokenizer, prompt, max_new_tokens=768)
             final = extract_final_translation(output)
             if final:
                 break
@@ -128,7 +128,7 @@ def translate_with_rag(
 
 def load_cached_translations(path: str) -> list[str]:
     """Load previously saved translations from a JSON file."""
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 

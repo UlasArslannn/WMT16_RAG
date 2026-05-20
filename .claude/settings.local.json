@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(python -u -c ' *)",
+      "Bash(python -m pip show datasets transformers torch)",
+      "Bash(Select-String \"Name|Version|not found\")",
+      "PowerShell(python -m pip show bitsandbytes 2>&1)"
+    ]
+  }
+}

@@ -35,7 +35,7 @@ Mimics how professional human translators work — analyze before translating, t
 **Stage 2 — Draft Translation:** initial translation with context from Stage 1.  
 **Stage 3 — Review & Refine (LLM-as-Judge):** evaluate draft against accuracy/fluency/register, produce final version.
 
-Output is extracted via `FINAL TRANSLATION:` marker.
+Output is extracted via `FINAL TRANSLATION:` marker. See [[bugs_fixes/maps-extraction-failure]] for a critical extraction bug where Qwen's bold markdown formatting (`**FINAL TRANSLATION:**`) caused 20% of outputs to be garbled.
 
 **Pros:** Catches terminology errors, improves fluency on complex sentences.  
 **Cons:** ~2.5× slower than zero-shot, ~2× longer output.

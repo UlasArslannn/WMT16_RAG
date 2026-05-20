@@ -24,6 +24,14 @@ Format: `## [YYYY-MM-DD] operation | slug`
 - Colab VM'de venv kernel'ı google.colab._kernel import hatasıyla başlamıyor
 - Çözüm: /etc/ipython/ipython_config.py'deki kernel_class atamasını try/except ile koşullu hale getir
 
+## [2026-05-20] bug | maps-extraction-failure
+- Pages touched: bugs_fixes/maps-extraction-failure.md, concepts/prompting-strategies.md, INDEX.md
+- MAPS yöntemi zero-shot'tan daha kötü çıkıyordu (0.7194 vs 0.7509 COMET)
+- Kök neden: Qwen `**FINAL TRANSLATION:**` bold format kullanıyor, extract_final_translation bunu parse edemiyordu
+- 200 çevirinin 40'ı (%20) bozuktu: 27 adet `****`, 3 boş, 10 adet `** text`
+- Çözüm: regex ile case-insensitive arama, `**` strip, bir sonraki satıra bakış, max_new_tokens 512→768
+- Düzeltme sonrası MAPS'ın ~0.82 COMET ile zero-shot'u geçmesi bekleniyor
+
 ## [2026-05-19] bug | comet-cuda-oom
 - Pages touched: bugs_fixes/comet-cuda-oom.md, concepts/comet-metric.md, INDEX.md
 - COMET evaluation sırasında Qwen modeli GPU'da yüklü olduğu için OOM hatası

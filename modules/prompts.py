@@ -100,16 +100,36 @@ def extract_final_translation(output: str) -> str:
     """
     Extract the final translation from the paper strategy output.
 
-    Looks for a line prefixed with "FINAL TRANSLATION:".
-    Falls back to the last non-empty line if the marker is not found.
+    Looks for a line containing "FINAL TRANSLATION:" (case-insensitive).
+    Handles Qwen's natural tendency to bold the marker: **FINAL TRANSLATION:**
+    Also handles the translation being on the next line after the marker.
+    Falls back to the last non-empty, non-markdown line if no marker is found.
     """
-    for line in reversed(output.strip().splitlines()):
-        if "FINAL TRANSLATION:" in line:
-            return line.replace("FINAL TRANSLATION:", "").strip()
+    import re
 
-    # Fallback: return the last non-empty line
-    for line in reversed(output.strip().splitlines()):
-        if line.strip():
-            return line.strip()
+    lines = output.strip().splitlines()
+
+    for i, line in enumerate(lines):
+        if re.search(r"FINAL TRANSLATION\s*:", line, re.IGNORECASE):
+            # Split on the marker and take everything after the colon
+            after = re.split(r"FINAL TRANSLATION\s*:", line, maxsplit=1, flags=re.IGNORECASE)[1]
+            # Strip any surrounding bold/markdown asterisks
+            after = re.sub(r"^\s*\*+\s*", "", after)
+            after = re.sub(r"\s*\*+\s*$", "", after).strip()
+
+            if after:
+                return after
+
+            # Translation is on the line immediately after the marker
+            if i + 1 < len(lines):
+                next_line = re.sub(r"^\s*\*+\s*", "", lines[i + 1]).strip()
+                if next_line:
+                    return next_line
+
+    # Fallback: last non-empty line that isn't pure markdown / step headers
+    for line in reversed(lines):
+        stripped = line.strip()
+        if stripped and not re.fullmatch(r"[\*\s\-_#:]+", stripped):
+            return stripped
 
     return output.strip()
